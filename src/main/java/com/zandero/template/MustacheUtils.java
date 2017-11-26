@@ -6,13 +6,13 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.zandero.utils.Assert;
 import com.zandero.utils.ResourceUtils;
+import com.zandero.utils.extra.JsonUtils;
 
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Helper class wrapping Mustache template engine
@@ -37,12 +37,29 @@ public class MustacheUtils {
 		Assert.notNullOrEmptyTrimmed(path, "Missing template path!");
 
 		InputStream resource = this.getClass().getResourceAsStream(path);
-		Assert.notNull(resource, "Could not load template: " + path);
+		Assert.notNull(resource, "Could not load template: '" + path + "'");
 
 		String content = ResourceUtils.getString(resource);
 
 		MustacheFactory mf = getFactory();
 		return mf.compile(new StringReader(content), path);
+	}
+
+	public Mustache loadFile(String path) {
+
+		Assert.notNullOrEmptyTrimmed(path, "Missing template file path!");
+
+		File file = new File(path);
+		Assert.isTrue(file.exists(), "File not found: '" + path + "'");
+
+		try {
+			String content = ResourceUtils.readFileToString(file);
+			MustacheFactory mf = getFactory();
+			return mf.compile(new StringReader(content), path);
+		}
+		catch (IOException e) {
+			throw new IllegalArgumentException("Failed to load file: '" + file + "' " + e.getMessage());
+		}
 	}
 
 	public String render(Mustache template, Object data) {
@@ -56,6 +73,17 @@ public class MustacheUtils {
 		}
 
 		template.execute(out, mustacheObject); // apply mustache template
+		return out.toString();
+	}
+
+	public String renderJson(Mustache template, String dataAsJson) {
+
+		Assert.notNull(template, "Missing template!");
+
+		Map<String, Object> data = JsonUtils.fromJsonAsMap(dataAsJson, String.class, Object.class);
+
+		StringWriter out = new StringWriter();
+		template.execute(out, data); // apply mustache template
 		return out.toString();
 	}
 
@@ -79,8 +107,7 @@ public class MustacheUtils {
 					}
 				}
 			};
-		}
-		else if (node.isObject()) {
+		} else if (node.isObject()) {
 			return new HashMap<String, Object>() {
 
 				private static final long serialVersionUID = 3663162388901179432L;
@@ -93,14 +120,11 @@ public class MustacheUtils {
 					}
 				}
 			};
-		}
-		else if (node.isBoolean()) {
+		} else if (node.isBoolean()) {
 			return node.booleanValue();
-		}
-		else if (node.isNull()) {
+		} else if (node.isNull()) {
 			return null;
-		}
-		else {
+		} else {
 			return node.asText();
 		}
 	}
