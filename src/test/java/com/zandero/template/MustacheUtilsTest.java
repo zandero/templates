@@ -27,6 +27,22 @@ public class MustacheUtilsTest {
 	}
 
 	@Test
+	public void renderJsonTest() {
+
+		Mustache template = utils.load("/templates/hello.html");
+		String result = utils.renderJson(template, "{\"name\": \"world\"}");
+		assertEquals("Hello world!", result);
+	}
+
+	@Test
+	public void renderNameValuesTest() {
+
+		Mustache template = utils.load("/templates/hello.html");
+		String result = utils.renderStrings(template, "name", "world");
+		assertEquals("Hello world!", result);
+	}
+
+	@Test
 	public void testRenderTemplate() throws Exception {
 
 		String content = ResourceUtils.readFileToString(new File("src/test/local.html"));

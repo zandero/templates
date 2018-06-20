@@ -76,6 +76,29 @@ public class MustacheUtils {
 		return out.toString();
 	}
 
+	public String renderStrings(Mustache template, String... data) {
+
+		Assert.notNull(template, "Missing template!");
+
+		Map<String, Object> map = new HashMap<>();
+		int count = 0;
+		String name = null;
+
+		for (String item: data) {
+			if (count % 2 == 1) {
+				map.put(name, item);
+			}
+			else {
+				name = item;
+			}
+			count ++;
+		}
+
+		StringWriter out = new StringWriter();
+		template.execute(out, map); // apply mustache template
+		return out.toString();
+	}
+
 	public String renderJson(Mustache template, String dataAsJson) {
 
 		Assert.notNull(template, "Missing template!");

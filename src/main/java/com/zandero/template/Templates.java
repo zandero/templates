@@ -14,6 +14,7 @@ public final class Templates {
 	private Templates() {
 		// hide constructor
 	}
+
 	/**
 	 * Directly renders given template
 	 *
@@ -57,6 +58,19 @@ public final class Templates {
 	/**
 	 * Loads resource file and renders it
 	 *
+	 * @param resource to be loaded
+	 * @param data     name value pairs
+	 * @return rendered output
+	 */
+	public static String renderStrings(String resource, String... data) {
+
+		Mustache mustacheTemplate = mustache.load(resource);
+		return mustache.renderStrings(mustacheTemplate, data);
+	}
+
+	/**
+	 * Loads resource file and renders it
+	 *
 	 * @param file to be loaded
 	 * @param data objects
 	 * @return rendered output
@@ -80,5 +94,16 @@ public final class Templates {
 		return mustache.renderJson(mustacheTemplate, dataAsJson);
 	}
 
+	/**
+	 * Loads resource file and renders it
+	 *
+	 * @param file to be loaded
+	 * @param data name value pairs
+	 * @return rendered output
+	 */
+	public static String renderFileStrings(String file, String... data) {
 
+		Mustache mustacheTemplate = mustache.load(file);
+		return mustache.renderStrings(mustacheTemplate, data);
+	}
 }
