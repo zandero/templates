@@ -6,7 +6,7 @@ Wrapper and helpers around Mustache templates
 <dependency>      
      <groupId>com.zandero</groupId>      
      <artifactId>templates</artifactId>      
-     <version>1.3.1</version>      
+     <version>1.3.3</version>      
 </dependency>
 ```
 
