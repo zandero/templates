@@ -2,13 +2,13 @@ package com.zandero.template;
 
 import com.github.mustachejava.Mustache;
 import com.zandero.utils.ResourceUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MustacheUtilsTest {
 

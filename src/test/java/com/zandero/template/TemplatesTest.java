@@ -1,14 +1,13 @@
 package com.zandero.template;
 
 import com.zandero.utils.junit.AssertFinalClass;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -62,16 +61,10 @@ public class TemplatesTest {
 		assertEquals("I'm not a resource: " + absolutePath, result);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void renderNonExistingFile() {
-		try {
 
-			Templates.renderFileJson("/notThere", "{\"file\": \"missing\"}");
-			fail();
-		}
-		catch (IllegalArgumentException e) {
-			assertEquals("File not found: '/notThere'", e.getMessage());
-			throw e;
-		}
+		IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> Templates.renderFileJson("/notThere", "{\"file\": \"missing\"}"));
+		assertEquals("File not found: '/notThere'", e.getMessage());
 	}
 }

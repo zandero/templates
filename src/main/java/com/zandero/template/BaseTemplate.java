@@ -18,8 +18,10 @@ public class BaseTemplate {
 	// storage of templates
 	Map<String, Mustache> cache = new HashMap<>();
 
+	/**
+	 * Empty template
+	 */
 	public BaseTemplate() {
-		// empty
 	}
 
 	/**
